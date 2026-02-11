@@ -1,4 +1,6 @@
-﻿namespace MathCalculator;
+﻿using System.Diagnostics;
+
+namespace MathCalculator;
 
 public partial class MainPage : ContentPage
 {
@@ -19,17 +21,87 @@ public partial class MainPage : ContentPage
         char op = opInput[0];
 
         // Check the chosen operator and perform the corresponding operation
-        double result = PerformArithmeticOperation(leftOperand, rightOperand);
+        double result = PerformArithmeticOperation(op, leftOperand, rightOperand);
 
         // Display the arithmetic expression in the output control
         string expression = $"{leftOperand} {op} {rightOperand} = {result}";
         _txtMathExp.Text = expression;
     }
 
-    private double PerformArithmeticOperation(double leftOperand, double rightOperand)
+    private double PerformArithmeticOperation(char op, double leftOperand, double rightOperand)
     {
-        //TODO: Implement the calculation of the arithmetic op and return result
-        return 3.14;
+        //Check the type of operand (op) and perform the corresponding operation
+        double result;
+        switch (op)
+        {
+            case '+':
+                result = PerformAddition(leftOperand, rightOperand);
+                break;
+
+            case '-':
+                result = PerformSubtraction(leftOperand, rightOperand);
+                break;
+
+            case '*':
+                result = PerformMultiplication(leftOperand, rightOperand);
+                break;
+
+            case '/':
+                result = PerformDivision(leftOperand, rightOperand);
+                break;
+
+            case '%':
+                result = PerformRemainder(leftOperand, rightOperand);
+                break;
+
+            default:
+                Debug.Assert(false, "Unknown arithmetic operation. Default result returned");
+                result = 0;
+                break;
+        }
+
+        return result;
+
+    }
+
+    private double PerformAddition(double leftOperand, double rightOperand)
+    {
+        double result;
+        result = leftOperand + rightOperand;
+        return result;
+    }
+
+    private double PerformSubtraction(double leftOperand, double rightOperand)
+    {
+        double result = leftOperand - rightOperand;
+        return result;
+    }
+    private double PerformMultiplication(double leftOperand, double rightOperand)
+    {
+        return leftOperand * rightOperand;
+    }
+    private double PerformDivision(double leftOperand, double rightOperand)
+    {
+        //Check whether the division operation is integer or real division
+        string divOp = (string)_pckOperand.SelectedItem;
+        if (divOp.Contains("int", StringComparison.OrdinalIgnoreCase))
+        {
+            //Perform an integer division which is done when both operands are integers
+            int leftIntOp = (int)leftOperand;
+            int rightIntOp = (int)rightOperand;
+
+            int result = leftIntOp / rightIntOp;
+            return result;
+        }
+        else
+        {
+            double result = leftOperand / rightOperand;
+            return result;
+        }
+    }
+    private double PerformRemainder(double leftOperand, double rightOperand)
+    {
+        return leftOperand % rightOperand;
     }
 
 }
